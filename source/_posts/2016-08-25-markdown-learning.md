@@ -1,8 +1,11 @@
 ---
 title: markdown-learning
 date: 2016-08-25 21:01:23
-tags: base
-comments: true
+categories: base
+tags: 
+ - base
+ - markdown
+comments: false
 ---
 Markdown学习笔记
 ===============
