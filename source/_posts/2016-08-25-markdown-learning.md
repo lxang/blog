@@ -11,6 +11,8 @@ Markdown学习笔记
 ===============
 Markdown的官方网站：http://daringfireball.net/projects/markdown/
 
+<!--more-->
+
 # 标题
 在段落面前加1~6个\#号即为对应级别的标题
 
@@ -34,9 +36,9 @@ Markdown的官方网站：http://daringfireball.net/projects/markdown/
 3. 三
 
 无序列表
-+   一
-+   二
-+   三
++ 一
++ 二
++ 三
 
 # 链接
 使用\[links\]\(url\)表示超链接
@@ -63,6 +65,7 @@ let input = item => item + 1;
 | col 2 is      | centered      |   $12 |
 | zebra stripes | are neat      |    $1 |
 </pre>
+
 | Tables        | Are           | Cool  |
 | ------------- |:-------------:| -----:|
 | col 3 is      | right-aligned | $1600 |
@@ -71,17 +74,15 @@ let input = item => item + 1;
 
 # 字符转义
 以下字符需要使用\\转义, 或使用html转义字符
->
 >\   反斜线
->`   反引号
->*   星号
+>\`   反引号
+>\*   星号
 >_   底线
 >{}  花括号
 >[]  方括号
 >()  括弧
 >\#   井字号
->+   加号
->-   减号
->.   英文句点
+>\+   加号
+>\-   减号
+>\.   英文句点
 >!   惊叹号
->
