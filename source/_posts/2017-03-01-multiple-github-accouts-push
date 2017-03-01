@@ -1,0 +1,69 @@
+---
+title: github-multiple-accounts-push
+date: 2017-03-01 21:01:23
+categories: base
+tags:
+- base
+- github
+comments: false
+---
+# github multiple accounts push
+
+### 问题背景
+今天碰到了一个往公用github账号push commit的需求， 发现使用https协议push返回403错误，使用ssh协议返回Permission denied。
+
+### 问题原因
+该公用账户的ssh key没有当前机器的公钥；
+
+
+### 解决步骤
+1. 创建新的ssh key
+因为默认的id_rsa已经被配置到自己的github账户了, 而同一个公钥只能配置一个github账户， 因此需要为新账户生成一个新的公钥。详细可见[官网help](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)
+```
+ssh-keygen -t rsa -f ~/.ssh/id_rsa_new -C "your_email@example.com"
+```
+
+默认ssh只会读取id_rsa,  为了让ssh识别新的私钥， 需要将其添加到ssh agent
+```
+ssh-add ~/.ssh/id_rsa_new
+```
+
+另外，确保ssh agent是否启动可以通过下面这个命令
+```
+eval $(ssh-agent -s)
+//启动可以用这个命令
+ssh-agent bash
+```
+以上这些命令， 如果是windows用户（比如我）需要在git bash里执行
+
+2. 添加ssh key到github account
+登录新的github账户， 在头像处找到Settings -> SSH and GPG keys -> New SSH key/Add SSH key。
+将新生成的公钥`id_rsa_new.pub`的内容贴进去， title可以自己起个名字。
+保持即可。
+
+3. 修改ssh config
+这个时候你在本地就有了两个ssh秘钥, `id_rsa`(默认)， `id_rsa_new`。github提交的时候怎么让它用`id_rsa_new`来认证呢？可以通过在~/.ssh/目录下配置config(如果没有， 可以自己建一个，听说linux下用的文件名是ssh_config)来实现。
+```
+#a account
+Host github.com
+HostName github.com
+User git
+IdentityFile ~/.ssh/id_rsa
+
+#b account
+Host github.com-b
+HostName github.com
+User git
+IdentityFile ~/.ssh/id_rsa_new
+```
+
+测试一下， 配置是否生效
+```
+ssh -T git@github.com-b
+```
+
+然后， 别着急，这里还没有结束哦。
+你需要把要使用`id_rsa_new`提交的git仓库的远程地址Host改成git@github.com-b
+```
+git remote set-url origin git@github.com-b:...
+```
